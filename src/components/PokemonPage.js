@@ -23,11 +23,26 @@ function PokemonPage() {
         pokemon.name.toLowerCase().includes(input.toLowerCase())))
   }
 
+  function handleSubmitNewPokemon(newPokemon) {
+    fetch("http://localhost:3001/pokemon", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({...newPokemon, hp: parseInt(newPokemon.hp)})
+    })
+    .then(r => r.json())
+    .then(data => {
+      setPokemonList(pokemonList => [...pokemonList, data]);
+      setPokemonDisplayList(pokemonDisplayList => [...pokemonDisplayList, data])
+    })
+  }
+
   return (
     <Container>
       <h1>Pokemon Searcher</h1>
       <br />
-      <PokemonForm />
+      <PokemonForm onSubmitNewPokemon={handleSubmitNewPokemon} />
       <br />
       <Search search={search} onInput={handleSearchInput} />
       <br />
